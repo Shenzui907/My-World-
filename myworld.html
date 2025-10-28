@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My World</title>
+  <style>
+    :root{
+      --bg:#0f1724;
+      --card:#0b1220;
+      --accent:#9be7ff;
+      --text:#e6eef7;
+      --muted:#a9b6c4;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(155,231,255,0.04), transparent),
+                  radial-gradient(1000px 500px at 90% 90%, rgba(155,231,255,0.03), transparent),
+                  var(--bg);
+      color:var(--text);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 16px;
+    }
+
+    .card{
+      width:100%;
+      max-width:980px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:18px;
+      padding:36px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+      text-align:center;
+    }
+
+    /* Title */
+    .title{
+      font-weight:800;
+      letter-spacing:2px;
+      display:inline-block;
+      line-height:1;
+      margin-bottom:18px;
+      user-select:none;
+      font-size: clamp(34px, 6vw, 64px);
+    }
+    .title .char{
+      display:inline-block;
+      transform-origin:center;
+      will-change: transform;
+      padding: 0 2px;
+    }
+
+    /* floating/dancing animation */
+    @keyframes floaty {
+      0%   { transform: translateY(0) rotate(0deg) scale(1); }
+      25%  { transform: translateY(-8px) rotate(-2deg) scale(1.02); }
+      50%  { transform: translateY(0) rotate(0deg) scale(1); }
+      75%  { transform: translateY(6px) rotate(2deg) scale(0.99); }
+      100% { transform: translateY(0) rotate(0deg) scale(1); }
+    }
+
+    /* slightly different durations/delays for natural dance */
+    .title .char {
+      animation-name: floaty;
+      animation-duration: 2200ms;
+      animation-iteration-count: infinite;
+      animation-timing-function: ease-in-out;
+    }
+
+    /* paragraph above image */
+    .desc{
+      max-width:760px;
+      margin: 10px auto 22px;
+      color:var(--muted);
+      line-height:1.6;
+      font-size: clamp(14px, 2.2vw, 18px);
+      background: linear-gradient(90deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+      padding:14px 18px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.015);
+    }
+
+      /* paragraph below image */
+    .desc1{
+      max-width:760px;
+      margin: 10px auto 22px;
+      color:var(--muted);
+      line-height:1.6;
+      font-size: clamp(14px, 2.2vw, 18px);
+      background: linear-gradient(90deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+      padding:14px 18px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.015);
+    }
+
+    /* image */
+    .image-wrap{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .image-wrap img{
+      width:100%;
+      max-width:220px;
+      height:250PX;
+      display:block;
+      border-radius:14px;
+      box-shadow: 0 18px 40px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    /* small footer note */
+    .note{
+      margin-top:14px;
+      font-size:12px;
+      color:rgba(255,255,255,0.25);
+    }
+
+    /* responsive tweaks */
+    @media (max-width:520px){
+      .card{ padding:22px; }
+      .title{ font-size: clamp(28px, 8vw, 42px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="card" role="main" aria-labelledby="main-title">
+    <!-- Title: JS splits the text into spans for per-letter animation -->
+    <div id="main-title" class="title" aria-hidden="false"></div>
+
+    <!-- Paragraph about the image (placed above image as requested).
+         Edit the text below to describe the picture once you add it. -->
+    <div class="desc" id="description">
+      <!-- Sample paragraph describing a typical anime image. Replace/edit as needed. -->
+       Welcome to My World — a colorful blend of dreams, designs, and desires. 
+       It’s where anime meets imagination, and creativity shines in every corner. 
+       Just like a world full of endless shops, I keep collecting little moments, emotions, and inspirations that define me. 
+       From the sparkle of an idea to the beauty of creation, My World is my own store of art, feelings, and fantasy — open to anyone who believes that creativity can be as beautiful as a dream and as real as a heartbeat.
+     <!-- Image placeholder -->
+<div class="image-wrap">
+  <img id="anime-image" src="anime1.jpg" alt="Your anime image" />
+</div>
+
+<!-- ✨ New paragraph BELOW the image -->
+<div class="desc" id="below-image-wrap">
+  My World isn’t just a place — it’s a feeling. It’s where creativity meets emotion, where every
+  image holds a memory, and every line tells a story. Through colors, art, and imagination,
+  I share the beauty I see in simple moments. This is where anime, dreams, and inspiration
+  come together — forming the world that belongs to me.
+</div>
+</div>
+
+    <div class="note">Tip:<code>Shenzui07</code> at my world web.Welcome to my world.</div>
+  </div>
+  <script>
+    // Create the dancing "My World" title by splitting into characters.
+    (function createTitle(){
+      const text = "My World";
+      const container = document.getElementById('main-title');
+      container.innerHTML = ""; // clear
+
+      // For each char create a span and stagger the animation delay for a natural dance
+      for(let i=0;i<text.length;i++){
+        const ch = text[i];
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = ch;
+        // spaces should still occupy space
+        if(ch === " ") { span.style.width = "10px"; span.style.display = "inline-block"; }
+        // Set a varied animation duration and delay to make it lively
+        const baseDelay = (i % 7) * 120; // ms
+        const duration = 1900 + (i % 4) * 220; // ms
+        span.style.animationDelay = '${baseDelay}ms';
+        span.style.animationDuration = '${duration}ms';
+        container.appendChild(span);
+      }
+    })();
+
+    // Optional: make the description editable in-browser for quick tuning.
+    // (If you prefer to edit only in code, remove/disable the next two lines.)
+    document.getElementById('description').setAttribute('contenteditable','true');
+    document.getElementById('description').style.cursor = 'text';
+  </script>
+</body>
+</html>
